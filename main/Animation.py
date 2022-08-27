@@ -1,5 +1,4 @@
-from time import sleep
-from turtle import color
+import pygame
 from dataclasses import dataclass
 from typing import Tuple
 
@@ -19,6 +18,7 @@ class Ray():
 class MatrixAnimationController():
 
     def __init__(self, matrix, transformGenerator, textUpdate=None):
+        pygame.init()
         self.matrix = matrix
         self.transformGenerator = transformGenerator(matrix)
         self.step = 0
@@ -57,13 +57,19 @@ class MatrixAnimationController():
 
         return True
 
-    # def playOnTimer(self, stepDelayInMS, stepsPerIteration=1):
+    def resetAnimation(self, matrix, transformGenerator):
+        self.matrix = matrix
+        self.transformGenerator = transformGenerator(matrix)
+        self.rayPool = []
+        self.step = 0
 
-    #     while (self.stepAnimation(stepsPerIteration)):
-    #         sleep(stepDelayInMS)
 
+    def playOnTimer(self, stepDelayInMS, steps, updateFunc):
+        for i in range(steps):
+            self.stepAnimation()
+            updateFunc()
+            pygame.time.wait(stepDelayInMS)
 
     def getRays(self):
         return self.rayPool
-
 

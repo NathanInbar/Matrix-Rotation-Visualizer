@@ -19,6 +19,8 @@ class ColorGenerator():
 
         #create the generator
         self.colorGen = self.colorGenerator()
+        self.rainbowGen = self.rainbowIncrGenerator()
+
 
     def colorGenerator(self):
         r,g,b = 0,0,0
@@ -33,8 +35,28 @@ class ColorGenerator():
             r,g,b = r%self.COL_MAX, b%self.COL_MAX, g%self.COL_MAX
             yield (r,g,b)
 
+    def rainbowIncrGenerator(self):
+        step = 51
+        while True:
+            for i in range(0,255,step):
+                yield (255,i,0)
+            for i in range(255, 0, -step):
+                yield (i,255,0)
+            for i in range(0, 255, step):
+                yield (0,255,i)
+            for i in range(255, 0, -step):
+                yield (0,i,255)
+            for i in range(0,255, step):
+                yield (i,0,255)
+            for i in range(255, 0, -step):
+                yield (255,0,i)
+
     def getNextColor(self):
-        return next(self.colorGen)
+        
+        if self.mode == "rainbow":
+            return next(self.rainbowGen)
+        else:
+            return next(self.colorGen)
 
 
 
@@ -115,23 +137,3 @@ class Button(UIComponent, TextComponent):
         centeredText = self.getTextCenter(self.coordinates, (self.width, self.height))
         win.blit(self.text, centeredText )
 
-
-# class TextBox(UIComponent, TextComponent):
-
-#     def __init__(self, coordinates, width, height, color, max_width, font=None, font_size=None):
-#         UIComponent.__init__(self,coordinates, width, height, color)
-#         self.user_text = ''
-#         TextComponent.__init__(self,self.user_text)
-#         self.max_width = max_width
-#         self.rect = pygame.Rect(coordinates[0], coordinates[1], width, height)
-
-#         if not font or font_size:
-#             self.font = pygame.font.SysFont("Arial",15)
-#         else: self.font = pygame.font.SysFont(font, font_size)
-
-#     def update(self):
-#         #self.rect.w = max(self.max_width, self.width)
-#         pass
-
-#     def render(self, win):
-#         win.blit(self.color, self.rect)
